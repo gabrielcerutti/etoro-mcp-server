@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gabriel-cerutti/etoro-mcp"
+    "url": "https://github.com/gabrielcerutti/etoro-mcp-connector"
   },
   "keywords": ["etoro", "trading", "finance", "portfolio", "crypto", "stocks"],
   "server": {
