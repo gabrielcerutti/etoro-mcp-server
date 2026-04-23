@@ -1,0 +1,27 @@
+# Source TypeScript (compiled output in dist/ is sufficient)
+src/
+tsconfig.json
+*.tsbuildinfo
+
+# CI / repo tooling
+.github/
+.mcpbignore
+
+# Dev / secrets
+.env
+.env.*
+
+# Claude-specific (not needed for npm consumers)
+CLAUDE.md
+.claude/
+plugin/
+
+# MCPB assets (bundled into the .mcpb separately, not needed for `npx etoro-mcp-server`)
+manifest.json
+etoro.png
+icon.png
+
+# Build artifacts
+*.mcpb
+*.dxt
+*.plugin
