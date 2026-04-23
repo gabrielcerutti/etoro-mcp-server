@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "etoro",
   "display_name": "eToro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Connect Claude to your eToro account for portfolio management, trading, and market research.",
   "icon": "etoro.png",
   "license": "MIT",
@@ -17,13 +17,22 @@
     "type": "git",
     "url": "https://github.com/gabrielcerutti/etoro-mcp-server"
   },
-  "keywords": ["etoro", "trading", "finance", "portfolio", "crypto", "stocks"],
+  "keywords": [
+    "etoro",
+    "trading",
+    "finance",
+    "portfolio",
+    "crypto",
+    "stocks"
+  ],
   "server": {
     "type": "node",
     "entry_point": "dist/index.js",
     "mcp_config": {
       "command": "node",
-      "args": ["${__dirname}/dist/index.js"],
+      "args": [
+        "${__dirname}/dist/index.js"
+      ],
       "env": {
         "ETORO_API_KEY": "${user_config.api_key}",
         "ETORO_USER_KEY": "${user_config.user_key}",
@@ -56,7 +65,11 @@
     }
   },
   "compatibility": {
-    "platforms": ["win32", "darwin", "linux"],
+    "platforms": [
+      "win32",
+      "darwin",
+      "linux"
+    ],
     "runtimes": {
       "node": ">=22.0.0"
     }
