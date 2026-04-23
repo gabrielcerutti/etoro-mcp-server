@@ -160,9 +160,9 @@ The assistant creates the watchlist and adds the instruments:
 
 ### Claude Desktop (recommended)
 
-Download the latest `etoro-mcp.mcpb` from the [Releases](../../releases) page and drag it into Claude Desktop:
+Download the latest `etoro-{version}.mcpb` from the [Releases](../../releases) page and drag it into Claude Desktop:
 
-**Extensions → drag `etoro-mcp.mcpb` into the window**
+**Extensions → drag `etoro-{version}.mcpb` into the window**
 
 You'll be prompted to enter your eToro API Key and User Key. That's it.
 
@@ -228,6 +228,8 @@ claude mcp add etoro-mcp \
 | Trading Mode | `ETORO_TRADING_MODE` | `--trading-mode` | `demo` |
 
 **Trading mode:** `demo` routes all trading calls through eToro's virtual account. Set to `real` only when you're ready to trade with real money.
+
+> **Important:** `trading_mode` must match the environment of your API key. A demo key with `real` mode (or vice versa) will cause authentication errors.
 
 ---
 
