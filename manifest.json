@@ -5,10 +5,14 @@
   "version": "1.0.0",
   "description": "Connect Claude to your eToro account for portfolio management, trading, and market research.",
   "icon": "etoro.png",
+  "license": "MIT",
   "author": {
     "name": "Gabriel Cerutti",
-    "email": "ceruttigabriel@gmail.com"
+    "email": "ceruttigabriel@gmail.com",
+    "url": "https://github.com/gabrielcerutti"
   },
+  "homepage": "https://github.com/gabrielcerutti/etoro-mcp-connector",
+  "support": "https://github.com/gabrielcerutti/etoro-mcp-connector/issues",
   "repository": {
     "type": "git",
     "url": "https://github.com/gabrielcerutti/etoro-mcp-connector"
