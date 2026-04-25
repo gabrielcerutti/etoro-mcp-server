@@ -22,144 +22,176 @@ MCP server wrapping the [eToro public API](https://public-api.etoro.com/api/v1),
 
 ## What Can You Do With It?
 
-The server is built around **research workflows** first. Below are illustrative conversations with an AI assistant connected to the eToro MCP server. Numbers and symbols are representative; actual responses draw from live eToro data.
+The server is built around **research workflows** first. The examples below show real multi-tool conversations — the assistant chains several `etoro_*` calls together to answer a single question. Numbers are representative; actual responses draw from live eToro data.
 
 ### 1. Portfolio health check
 
-> **You:** How is my portfolio doing this quarter? Give me the sector breakdown and flag my biggest drawdown.
+The assistant calls `etoro_get_portfolio` to pull your open positions, then `etoro_get_instruments` to resolve instrument IDs to names and sectors, and `etoro_get_rates` for live prices. It assembles a full snapshot from the raw data.
+
+> **You:** How is my portfolio doing? Break it down by sector and flag any trouble spots.
 >
-> **Assistant:** Your portfolio snapshot:
+> **Assistant:** I pulled your portfolio (98 open positions), resolved each instrument, and fetched live rates. Here's the picture:
 >
-> - **Credit (cash):** $4,218 • **Invested:** $41,560 • **Unrealized P&L:** +$3,842 (+9.2%)
-> - **Positions:** 18 open • Longest-held: 412 days
+> - **Cash:** $22,265 • **Invested:** $45,782 • **Positions:** 98 open
 >
-> **Sector exposure (approx.):**
+> **Sector breakdown:**
 >
-> | Sector | % of invested | Unrealized P&L |
+> | Sector | % of invested | Top holdings |
 > | --- | --- | --- |
-> | Technology | 38% | +14.1% |
-> | Consumer Cyclical | 19% | +6.8% |
-> | Crypto | 17% | −11.4% |
-> | Healthcare | 12% | +3.0% |
-> | Financials | 8% | +2.1% |
-> | Energy / Other | 6% | +0.4% |
+> | Technology | 38% | GOOG, META, MSFT, NVDA, AMZN |
+> | ETFs & Index | 22% | VOO, QQQ, SOXX, ARGT, IEUR |
+> | Crypto | 15% | BTC, ETH |
+> | Healthcare | 10% | UNH |
+> | Financials | 8% | SAP |
+> | Other | 7% | LDO + others |
 >
-> **Biggest drawdown:** SOL — averaged in at $121, currently $79.30 (−34%). This single position is dragging the crypto sleeve down 11%. Your tech sleeve has fully offset it at the portfolio level.
+> <img src="readme-assets/portfolio-allocation.png" width="480" alt="Portfolio sector allocation" />
+>
+> **Trouble spot:** Your tech sleeve is 38% of invested capital and concentrated in 5 mega-caps. A single sector drawdown hits hard — consider whether the ETF overlap (QQQ, SOXX) is intentional diversification or accidental doubling-down.
+
+**Tools used:** `etoro_get_portfolio` → `etoro_get_instruments` → `etoro_get_rates`
 
 ---
 
-### 2. Thematic research — AI-adjacent names
+### 2. Instrument research
 
-> **You:** What AI-related names are available on eToro and which of them are popular investors loading up on right now?
+Search is keyword-based — `etoro_search_instruments` finds instruments by ticker or company name, then you chain `etoro_get_instruments` for full details and `etoro_get_candles` for price history.
+
+> **You:** Pull up NVDA — I want the current price and a weekly chart for the last month.
 >
-> **Assistant:** Searching for "AI" themed instruments:
+> **Assistant:** Searching for "NVDA" and pulling candle data:
 >
-> | Instrument | Live price | 1Y change |
-> | --- | --- | --- |
-> | NVDA — NVIDIA | $118.40 | +142% |
-> | PLTR — Palantir | $29.60 | +78% |
-> | AI — C3.ai | $24.10 | +11% |
-> | TAO — Bittensor | $512.00 | +64% |
-> | FET — Fetch.ai | $1.42 | +94% |
+> - **NVIDIA Corporation** (NVDA) — InstrumentID 1545
+> - **Live rate:** Bid $208.14 / Ask $208.40
+> - **Exchange:** NASDAQ • **Type:** Stock • **Sector:** Semiconductors
 >
-> **What popular investors (top-quartile annual gain, low risk score) are accumulating over the last 90 days:**
+> Weekly candles (last 5 weeks):
 >
-> - **NVDA** — 62% of popular investors holding, avg position size growing
-> - **PLTR** — newer cohort, 41% holding, recent adds concentrated in the last 30 days
-> - **TAO** — niche, only ~8% holding but those who do are scaling in aggressively
+> | Week of | Open | High | Low | Close |
+> | --- | --- | --- | --- | --- |
+> | Mar 22 | $172.65 | $181.20 | $167.01 | $167.61 |
+> | Mar 29 | $165.26 | $177.47 | $162.95 | $176.72 |
+> | Apr 5 | $176.12 | $189.98 | $173.66 | $188.53 |
+> | Apr 12 | $184.15 | $201.69 | $183.98 | $201.64 |
+> | Apr 19 | $199.02 | $210.92 | $197.23 | $208.26 |
 >
-> Want me to build a watchlist for this theme?
+> <img src="readme-assets/nvda-candles.png" width="560" alt="NVDA weekly candlestick chart" />
+>
+> NVDA rallied +27% off the March low ($162.95 → $208.26), with each weekly candle printing a higher low. Momentum is strong but the move is getting extended.
+
+**Tools used:** `etoro_search_instruments` → `etoro_get_instruments` → `etoro_get_rates` → `etoro_get_candles`
 
 ---
 
 ### 3. Copy-trading due diligence
 
-> **You:** Vet user jeppekirkbonde for a long-term copy allocation. I want the honest risk picture, not the marketing view.
+Vet popular investors using real public data. The assistant calls `etoro_get_user_profile` for identity and stats, then `etoro_get_user_performance` for the full yearly return history.
+
+> **You:** Vet user jeppekirkbonde for a long-term copy allocation. I want the honest risk picture.
 >
 > **Assistant:** Here's what the data says on **jeppekirkbonde**:
 >
-> **Performance:**
+> - **Name:** Jeppe Kirk Bonde • **PI Level:** 6 (highest tier)
+> - **Copiers:** 25,000+ • **AUM:** $200M+
+> - **Background:** MSc Finance, Copenhagen Business School
 >
-> | Window | Gain | Max intra-period drawdown |
-> | --- | --- | --- |
-> | 1 year | +18.6% | −9.2% |
-> | 2 years | +44.1% | −18.7% (2022 tech sell-off) |
-> | 5 years | +210% | −28% (2020 covid) |
+> **Year-by-year performance (real data):**
 >
-> - **Risk score:** 4/10 daily, 4/10 monthly (moderate)
-> - **Strategy:** Long-only, concentrated in US large-cap tech. Top 5 positions = 61% of portfolio. Avg holding period ≈ 380 days — genuine long-term style.
-> - **Copiers:** ~48k users with >1 year of copy relationship; most in "more than $1,000" allocation bracket.
+> | Year | Return | | Year | Return |
+> | --- | --- | --- | --- | --- |
+> | 2013 | +8.9% | | 2020 | +36.9% |
+> | 2014 | −14.3% | | 2021 | +15.9% |
+> | 2015 | +22.4% | | 2022 | −19.2% |
+> | 2016 | +81.1% | | 2023 | +23.9% |
+> | 2017 | +150.9% | | 2024 | +21.0% |
+> | 2018 | −10.9% | | 2025 | +37.7% |
+> | 2019 | +45.1% | | | |
+>
+> <img src="readme-assets/jeppe-performance.png" width="600" alt="jeppekirkbonde yearly performance" />
+>
+> **Average annual return:** +30.7% across 13 full years. Three down years (2014, 2018, 2022) with a max drawdown of −19.2% in the 2022 tech selloff.
 >
 > **What you should know:**
 >
-> 1. Drawdowns are real — a 2022-like environment will cost you 15–20% on paper.
-> 2. The concentration is a feature, not a bug; it's also the single biggest risk.
-> 3. Low portfolio turnover means copying behaves more like "passive tech tilt" than active management.
+> 1. This is a concentrated, long-only US tech strategy. The +150.9% in 2017 and +81.1% in 2016 are outliers — don't expect those every year.
+> 2. Down years are real: 2022 cost −19.2%. If you can't stomach a 20% paper loss, this isn't the right copy.
+> 3. 25K+ copiers and $200M+ AUM means his moves have market impact in smaller names. Slippage is a factor.
 >
-> Reasonable for a multi-year allocation if you can stomach the drawdowns. Not appropriate if you need the capital inside 18 months.
+> Reasonable for multi-year capital if you accept the volatility. Not appropriate for money you need inside 18 months.
+
+**Tools used:** `etoro_get_user_profile` → `etoro_get_user_performance`
 
 ---
 
-### 4. Macro-aware portfolio review (no trade)
+### 4. Watchlist management
 
-> **You:** My portfolio is heavy on tech. Any risks on this week's macro calendar I should be aware of?
+The full watchlist lifecycle — create, populate, rename, and curate — all through natural language.
+
+> **You:** Create a "Semiconductor" watchlist and add NVDA, AMD, ASML, TSM, and AVGO to it.
 >
-> **Assistant:** Your tech exposure totals ~$15,800 (38% of invested capital) across NVDA, MSFT, GOOGL, META, AAPL and two semi ETFs. This week's watch-list:
+> **Assistant:** Done:
 >
-> - **Wed** — CPI print (core consensus +0.3% MoM). A hotter number re-prices rate-cut odds → tech multiples compress first.
-> - **Thu** — Fed speakers (Williams, Waller). Any hawkish language extends the recent USD rally, which typically pressures mega-cap tech with international revenue.
-> - **Fri** — NVDA earnings (after close). Binary event for your largest position and the semi ETFs.
+> 1. Created watchlist **"Semiconductor"** (ID: 48291)
+> 2. Searched and resolved all 5 tickers to instrument IDs
+> 3. Added: NVDA (1545), AMD (2842), ASML (5765), TSM (3901), AVGO (6192)
 >
-> **What this means for you specifically:**
+> Your watchlists now:
+>
+> | Watchlist | Items |
+> | --- | --- |
+> | Recently Invested | 38 |
+> | My Watchlist | 34 |
+> | Stocks pre-screening | 69 |
+> | ETFs | 54 |
+> | Semiconductor ← new | 5 |
+> | People & Smart Portfolios | 26 |
+> | Crypto | 6 |
+> | Commodities | 5 |
+
+**Tools used:** `etoro_create_watchlist` → `etoro_search_instruments` → `etoro_add_watchlist_items` → `etoro_get_watchlists`
+
+---
+
+### 5. DCA backtest with historical candles
+
+Use `etoro_get_candles` to pull years of OHLCV data, then simulate a dollar-cost averaging strategy — no orders placed, pure research.
+
+> **You:** Backtest a $500/month DCA into QQQ over the last 3 years. What would I have today?
+>
+> **Assistant:** Pulling weekly QQQ candles (156 weeks) and simulating $500 on the first trading day of each month:
+>
+> - **Total invested:** $18,000 (36 months × $500)
+> - **Units accumulated:** ~38.2 QQQ
+> - **Current value:** $25,365 (at $664.01/share)
+> - **Gain:** +$7,365 (+40.9% on invested capital)
+> - **Approx. IRR:** ~12.8%/year
+>
+> **Worst stretch:** Nov 2022 – Mar 2023, paper drawdown of −22% on the accumulated stack. You bought through it — those discounted shares are now your biggest winners.
+>
+> No orders placed. This is research only.
+
+**Tools used:** `etoro_get_candles` → `etoro_get_rates` (for current price)
+
+---
+
+### 6. Macro-aware portfolio review
+
+Combine portfolio data with the assistant's general knowledge to get a risk assessment tied to your actual holdings.
+
+> **You:** My portfolio is heavy on tech. Flag any risks from this week's macro calendar.
+>
+> **Assistant:** Your tech exposure totals ~$17,400 (38% of invested capital) across GOOG, META, MSFT, NVDA, AMZN and the SOXX/QQQ ETFs. This week's watch-list:
+>
+> - **Wed** — CPI print (core consensus +0.3% MoM). A hot number re-prices rate-cut odds → tech multiples compress first.
+> - **Thu** — Fed speakers (Williams, Waller). Hawkish language strengthens USD, pressuring mega-cap international revenue.
+> - **Fri** — NVDA earnings (after close). Binary event for your largest single-stock position.
+>
+> **What this means for you:**
 >
 > - A hot CPI + hawkish Fed combo could knock 3–5% off your tech sleeve short-term.
-> - NVDA earnings will drive ~30% of your week-over-week portfolio change whether you like it or not. Know your thesis before it prints.
->
-> I'm not recommending any action — just flagging the concentration. Your stop-losses are already in place on 4 of 7 tech positions.
+> - NVDA earnings will drive ~8% of your portfolio's week-over-week change. Know your thesis before it prints.
 
----
-
-### 5. Watchlist curation for a thesis
-
-> **You:** Build me a "Defensive Quality" watchlist: large-cap US, dividend-paying, low historical volatility, minimum 10-year track record.
->
-> **Assistant:** I searched across US large-caps, filtered by industry-weighted beta and dividend history. Here's a 12-name starter list:
->
-> | Ticker | Sector | Div yield | 5Y β (approx) |
-> | --- | --- | --- | --- |
-> | KO | Consumer Staples | 3.1% | 0.58 |
-> | PG | Consumer Staples | 2.4% | 0.46 |
-> | JNJ | Healthcare | 3.0% | 0.55 |
-> | MRK | Healthcare | 2.7% | 0.44 |
-> | WMT | Consumer Staples | 1.3% | 0.51 |
-> | VZ | Telecom | 6.4% | 0.42 |
-> | DUK | Utilities | 4.0% | 0.47 |
-> | SO | Utilities | 3.7% | 0.49 |
-> | AEP | Utilities | 3.9% | 0.50 |
-> | CL | Consumer Staples | 2.1% | 0.41 |
-> | PEP | Consumer Staples | 3.3% | 0.50 |
-> | NEE | Utilities | 3.2% | 0.56 |
->
-> I've created a watchlist called **"Defensive Quality"** and added all 12. You can review it in the eToro app or ask me to drop any of them.
-
----
-
-### 6. DCA backtest against historical candles
-
-> **You:** Model a monthly $500 DCA into QQQ over the last 5 years. What would I have now? (No orders — research only.)
->
-> **Assistant:** Pulling weekly QQQ candles back 5 years and simulating a $500 buy on the first trading day of each month:
->
-> - **Total invested:** $30,000 (60 months × $500)
-> - **Total units accumulated:** ~90.4 QQQ
-> - **Current value:** $46,950
-> - **Realized gain on contributions:** +$16,950 (+56.5% on invested capital)
-> - **Approximate IRR:** 10.2% / year
-> - **Worst rolling 12-month period:** Jan 2022 – Jan 2023, paper drawdown of −31% on the accumulated stack
->
-> Notable: your cost basis is smoothed because you bought through the 2022 drawdown — lump-sum at the start would have left you ~$3k poorer on paper through mid-2022, but ~$2k ahead today on a pure return basis. DCA lost a bit of upside; it bought you psychological durability.
->
-> No orders placed.
+**Tools used:** `etoro_get_portfolio` → `etoro_get_instruments` → `etoro_get_rates` (+ assistant's macro knowledge)
 
 ---
 
@@ -171,11 +203,18 @@ The server is built around **research workflows** first. Below are illustrative 
 
 All examples above are research-only. When you're ready to execute, the same interface places orders. Orders always respect the configured `ETORO_TRADING_MODE` (`demo` for paper, `real` for live).
 
-> **You:** Place a buy limit order for 5 SOL if it reaches $75, with a stop-loss at $55.
+> **You:** Buy $500 of NVDA at market.
 >
-> **Assistant:** Current SOL is $78.21. Placed: **buy limit 5 SOL @ $75** ($375 notional), stop-loss $55. Order confirmed — ID `3418072`. Mode: `demo`.
+> **Assistant:** Confirmed — opening a market position:
+>
+> - **Instrument:** NVDA (1545)
+> - **Amount:** $500
+> - **Rate:** $208.40 (ask)
+> - **Mode:** `demo`
+>
+> Position opened — ID `3418072`. This is a demo trade, no real money involved.
 
-Full trading coverage includes open position (by amount or units), partial close, limit orders, cancel order, and listing pending orders.
+Full trading coverage includes: open position by amount or units (`etoro_open_position`), close or partially close (`etoro_close_position`), limit/entry orders (`etoro_place_limit_order`), cancel pending orders (`etoro_cancel_order`), and listing pending orders (`etoro_get_orders`).
 
 </details>
 
