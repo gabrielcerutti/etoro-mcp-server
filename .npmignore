@@ -18,7 +18,6 @@ plugin/
 
 # MCPB assets (bundled into the .mcpb separately, not needed for `npx etoro-mcp-server`)
 manifest.json
-etoro.png
 icon.png
 
 # Build artifacts

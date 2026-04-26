@@ -68,6 +68,9 @@ jobs:
           VERSION=$(node -e "console.log(require('./manifest.json').version)")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Validate MCPB manifest
+        run: npx @anthropic-ai/mcpb validate manifest.json
+
       - name: Package MCPB
         run: npx @anthropic-ai/mcpb pack . etoro-${{ steps.get_version.outputs.version }}.mcpb
 
