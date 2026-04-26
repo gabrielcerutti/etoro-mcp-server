@@ -220,6 +220,74 @@ Full trading coverage includes: open position by amount or units (`etoro_open_po
 
 ---
 
+## Composing with Other MCP Servers
+
+MCP servers are designed to be composed. The eToro server handles portfolio data, live rates, candles, and trading — but an AI assistant can call tools from **multiple servers in a single conversation**, filling in the gaps that no single API covers.
+
+### Example: earnings risk check across two servers
+
+With eToro + a financial data server (e.g. [Financial Datasets](https://github.com/financial-datasets/mcp-server), [Alpha Vantage](https://github.com/alphavantage/mcp-server), or similar):
+
+> **You:** Do any of my open positions have earnings this week? Flag the ones I should watch.
+>
+> **Assistant:** Pulling your portfolio from eToro (98 positions), then checking the earnings calendar:
+>
+> - **NVDA** — reports Thursday after close. Your position: $4,200 (9.2% of invested). This is a binary event — expect ±8% move.
+> - **GOOGL** — reports Tuesday after close. Your position: $3,100 (6.8%). Consensus is +12% YoY revenue; ad revenue mix is the swing factor.
+> - **UNH** — reported Monday pre-market (already priced in). Beat on EPS, slight miss on membership growth.
+>
+> The rest of your holdings have no earnings this week. Your biggest event risk is NVDA Thursday — it's your largest single-stock position.
+
+This isn't possible with the eToro server alone — it knows your positions but not the earnings calendar. The financial data server knows the calendar but not your portfolio. Together, the assistant connects both.
+
+### Natural pairings
+
+| Pair with | What it adds | Example workflow |
+| --- | --- | --- |
+| **Research & ratings** ([Morningstar](https://developer.morningstar.com/direct-web-services/documentation/morningstar-mcp-server/about)) | Analyst research, fair value estimates, moat ratings, fund data | "What's Morningstar's fair value for my tech holdings?" — pull portfolio, fetch ratings |
+| **News & web search** ([Brave Search](https://github.com/brave/brave-search-mcp-server), [Tavily](https://github.com/tavily-ai/tavily-mcp)) | Breaking news, sentiment, event context | "Any news on my holdings today?" — pull portfolio, search each ticker |
+| **Financial data** ([Financial Datasets](https://github.com/financial-datasets/mcp-server), [Alpha Vantage](https://mcp.alphavantage.co/)) | Fundamentals, earnings, SEC filings, economic calendar | "Show me P/E ratios for my tech positions" — pull holdings, fetch fundamentals |
+| **Market data** ([Polygon.io](https://github.com/polygon-io/mcp_polygon), [Twelve Data](https://github.com/twelvedata/mcp), [Massive](https://github.com/massive-com/mcp_massive)) | Real-time streaming, options chains, screener universes | "Screen the S&P 500 for momentum setups, then add the top 5 to my watchlist" |
+| **Free alternative** ([Yahoo Finance](https://github.com/Alex2Yang97/yahoo-finance-mcp)) | Prices, financials, options, market news (no API key needed) | "Compare earnings growth for NVDA vs AMD over the last 4 quarters" |
+
+### Configuration
+
+Just add multiple servers to your MCP config — the assistant sees all tools from all servers:
+
+```json
+{
+  "mcpServers": {
+    "etoro": {
+      "command": "npx",
+      "args": ["-y", "etoro-mcp-server"],
+      "env": {
+        "ETORO_API_KEY": "your-api-key",
+        "ETORO_USER_KEY": "your-user-key",
+        "ETORO_TRADING_MODE": "demo"
+      }
+    },
+    "financial-data": {
+      "command": "npx",
+      "args": ["-y", "financial-datasets-mcp-server"],
+      "env": {
+        "FINANCIAL_DATASETS_API_KEY": "your-key"
+      }
+    },
+    "news": {
+      "command": "npx",
+      "args": ["-y", "tavily-mcp-server"],
+      "env": {
+        "TAVILY_API_KEY": "your-key"
+      }
+    }
+  }
+}
+```
+
+The assistant will automatically chain tools across servers when a question requires it — no extra wiring needed.
+
+---
+
 ## Installation
 
 ### Claude Desktop (recommended)
