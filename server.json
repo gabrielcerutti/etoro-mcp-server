@@ -3,7 +3,7 @@
   "name": "io.github.gabrielcerutti/etoro-mcp-server",
   "title": "eToro MCP Server",
   "description": "Connect any MCP-compatible AI assistant (Claude, Cursor, and others) to your eToro account for portfolio analysis, market research, and trading.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "websiteUrl": "https://github.com/gabrielcerutti/etoro-mcp-server",
   "repository": {
     "url": "https://github.com/gabrielcerutti/etoro-mcp-server",
@@ -14,7 +14,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "etoro-mcp-server",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "transport": {
         "type": "stdio"
       },
