@@ -198,7 +198,7 @@ Combine portfolio data with the assistant's general knowledge to get a risk asse
 <details>
 <summary><b>Trading is also supported</b> — one example</summary>
 
-> [!WARNING]
+> ⚠️
 > **Letting an AI execute real-money trades is risky.** The same natural-language interface that makes research fast also makes it easy to misinterpret intent — a typo, an ambiguous number, a stale context from earlier in the conversation. Mitigations: start in `ETORO_TRADING_MODE=demo`, use read-only API keys for anything that doesn't need write access, and require explicit confirmation in your conversation before any `real` order.
 
 All examples above are research-only. When you're ready to execute, the same interface places orders. Orders always respect the configured `ETORO_TRADING_MODE` (`demo` for paper, `real` for live).
@@ -462,3 +462,31 @@ All tools are prefixed with `etoro_` for namespace isolation when composed with 
 | `etoro_get_user_feed` | Get social feed for a user |
 | `etoro_create_post` | Create a social feed post |
 | `etoro_create_comment` | Comment on a post |
+
+---
+
+## Disclaimer
+
+This project is an **unofficial**, community-built integration. It is not affiliated with, endorsed by, or supported by eToro. Use it at your own risk.
+
+- **Not financial advice.** Nothing in this server, its documentation, or its example outputs constitutes investment advice, a recommendation, or a solicitation to buy or sell any financial instrument.
+- **You are responsible for your trades.** The server can place real-money orders when configured in `real` mode. Verify every order before confirming, and understand that AI assistants can misinterpret intent.
+- **API changes may break things.** This server depends on eToro's public API, which can change without notice. Always pin a version in production.
+- **Demo first.** Start with `ETORO_TRADING_MODE=demo` and only switch to `real` after you're confident in your setup.
+
+---
+
+## Contributing
+
+Contributions are welcome — bug reports, feature requests, and pull requests.
+
+1. Fork the repo and create a branch from `main`
+2. Run `npm install && npm run build` to verify your changes compile
+3. Run `npm test` to make sure existing tests pass
+4. Open a PR with a clear description of what changed and why
+
+---
+
+## License
+
+[MIT](LICENSE) — use it, fork it, build on it.
