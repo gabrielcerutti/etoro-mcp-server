@@ -3,7 +3,7 @@
   "manifest_version": "0.3",
   "name": "etoro",
   "display_name": "eToro",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Connect Claude to your eToro account for portfolio analysis, market research, and trading.",
   "long_description": "Wraps the eToro public API and exposes 35 tools for AI assistants — built primarily for **investment research and portfolio analysis**. Assess open positions and unrealized P&L, research instruments and themes, vet popular investors for copy-trading, and backtest DCA strategies against historical OHLCV data. Trading is fully supported (market and limit orders, partial close), but use care: **letting an AI agent place real-money orders is genuinely risky.** Always start in `demo` mode and require explicit confirmation before any `real` order.",
   "icon": "icon.png",
@@ -47,41 +47,146 @@
   },
   "tools_generated": true,
   "tools": [
-    { "name": "etoro_search_instruments", "description": "Search instruments by keyword or exact ticker (stocks, crypto, ETFs)." },
-    { "name": "etoro_get_instruments", "description": "Get full instrument details by IDs (1–100)." },
-    { "name": "etoro_get_instrument_types", "description": "List all instrument types eToro supports." },
-    { "name": "etoro_get_industries", "description": "List industry classifications for stock instruments." },
-    { "name": "etoro_get_exchanges", "description": "List stock exchanges eToro supports." },
-    { "name": "etoro_get_candles", "description": "Get OHLCV candles for technical analysis and backtesting." },
-    { "name": "etoro_get_closing_prices", "description": "Get historical daily closing prices." },
-    { "name": "etoro_get_rates", "description": "Get live bid/ask rates for instruments." },
-    { "name": "etoro_get_portfolio", "description": "Get portfolio + P&L: positions, unrealized P&L, exposure summary, longest holding." },
-    { "name": "etoro_get_orders", "description": "List all pending orders (limit / entry)." },
-    { "name": "etoro_get_trade_history", "description": "Closed-trade history with entry/exit, P&L, duration." },
-    { "name": "etoro_open_position", "description": "Open a position by USD amount or units (mutually exclusive)." },
-    { "name": "etoro_close_position", "description": "Close a position fully or partially via unitsToDeduct." },
-    { "name": "etoro_place_limit_order", "description": "Place a limit / entry order at a specified price." },
-    { "name": "etoro_cancel_order", "description": "Cancel a pending order." },
-    { "name": "etoro_get_current_user", "description": "Get the authenticated user's identity (GCID, real/demo CIDs)." },
-    { "name": "etoro_get_user_profile", "description": "Get a user's public profile by username." },
-    { "name": "etoro_get_user_performance", "description": "Get a user's trading performance (optionally by period)." },
-    { "name": "etoro_get_user_trades", "description": "Get a user's trade info for a period." },
-    { "name": "etoro_get_user_portfolio", "description": "Get a user's live public portfolio holdings." },
-    { "name": "etoro_discover_users", "description": "Discover popular investors filtered by gain, risk score, period." },
-    { "name": "etoro_get_copiers", "description": "Get info about users currently copying your portfolio." },
-    { "name": "etoro_get_watchlists", "description": "List your watchlists." },
-    { "name": "etoro_create_watchlist", "description": "Create a new watchlist." },
-    { "name": "etoro_delete_watchlist", "description": "Delete a watchlist." },
-    { "name": "etoro_rename_watchlist", "description": "Rename a watchlist." },
-    { "name": "etoro_add_watchlist_items", "description": "Add instruments to a watchlist." },
-    { "name": "etoro_remove_watchlist_item", "description": "Remove an instrument from a watchlist." },
-    { "name": "etoro_set_default_watchlist", "description": "Mark a watchlist as default." },
-    { "name": "etoro_get_curated_lists", "description": "Get eToro's curated / featured instrument lists." },
-    { "name": "etoro_get_public_watchlists", "description": "Browse a user's public watchlists." },
-    { "name": "etoro_get_instrument_feed", "description": "Get the social feed for an instrument." },
-    { "name": "etoro_get_user_feed", "description": "Get the social feed for a user." },
-    { "name": "etoro_create_post", "description": "Create a new post on the eToro social feed." },
-    { "name": "etoro_create_comment", "description": "Comment on an existing post." }
+    {
+      "name": "etoro_search_instruments",
+      "description": "Search instruments by keyword or exact ticker (stocks, crypto, ETFs)."
+    },
+    {
+      "name": "etoro_get_instruments",
+      "description": "Get full instrument details by IDs (1–100)."
+    },
+    {
+      "name": "etoro_get_instrument_types",
+      "description": "List all instrument types eToro supports."
+    },
+    {
+      "name": "etoro_get_industries",
+      "description": "List industry classifications for stock instruments."
+    },
+    {
+      "name": "etoro_get_exchanges",
+      "description": "List stock exchanges eToro supports."
+    },
+    {
+      "name": "etoro_get_candles",
+      "description": "Get OHLCV candles for technical analysis and backtesting."
+    },
+    {
+      "name": "etoro_get_closing_prices",
+      "description": "Get historical daily closing prices."
+    },
+    {
+      "name": "etoro_get_rates",
+      "description": "Get live bid/ask rates for instruments."
+    },
+    {
+      "name": "etoro_get_portfolio",
+      "description": "Get portfolio + P&L: positions, unrealized P&L, exposure summary, longest holding."
+    },
+    {
+      "name": "etoro_get_orders",
+      "description": "List all pending orders (limit / entry)."
+    },
+    {
+      "name": "etoro_get_trade_history",
+      "description": "Closed-trade history with entry/exit, P&L, duration."
+    },
+    {
+      "name": "etoro_open_position",
+      "description": "Open a position by USD amount or units (mutually exclusive)."
+    },
+    {
+      "name": "etoro_close_position",
+      "description": "Close a position fully or partially via unitsToDeduct."
+    },
+    {
+      "name": "etoro_place_limit_order",
+      "description": "Place a limit / entry order at a specified price."
+    },
+    {
+      "name": "etoro_cancel_order",
+      "description": "Cancel a pending order."
+    },
+    {
+      "name": "etoro_get_current_user",
+      "description": "Get the authenticated user's identity (GCID, real/demo CIDs)."
+    },
+    {
+      "name": "etoro_get_user_profile",
+      "description": "Get a user's public profile by username."
+    },
+    {
+      "name": "etoro_get_user_performance",
+      "description": "Get a user's trading performance (optionally by period)."
+    },
+    {
+      "name": "etoro_get_user_trades",
+      "description": "Get a user's trade info for a period."
+    },
+    {
+      "name": "etoro_get_user_portfolio",
+      "description": "Get a user's live public portfolio holdings."
+    },
+    {
+      "name": "etoro_discover_users",
+      "description": "Discover popular investors filtered by gain, risk score, period."
+    },
+    {
+      "name": "etoro_get_copiers",
+      "description": "Get info about users currently copying your portfolio."
+    },
+    {
+      "name": "etoro_get_watchlists",
+      "description": "List your watchlists."
+    },
+    {
+      "name": "etoro_create_watchlist",
+      "description": "Create a new watchlist."
+    },
+    {
+      "name": "etoro_delete_watchlist",
+      "description": "Delete a watchlist."
+    },
+    {
+      "name": "etoro_rename_watchlist",
+      "description": "Rename a watchlist."
+    },
+    {
+      "name": "etoro_add_watchlist_items",
+      "description": "Add instruments to a watchlist."
+    },
+    {
+      "name": "etoro_remove_watchlist_item",
+      "description": "Remove an instrument from a watchlist."
+    },
+    {
+      "name": "etoro_set_default_watchlist",
+      "description": "Mark a watchlist as default."
+    },
+    {
+      "name": "etoro_get_curated_lists",
+      "description": "Get eToro's curated / featured instrument lists."
+    },
+    {
+      "name": "etoro_get_public_watchlists",
+      "description": "Browse a user's public watchlists."
+    },
+    {
+      "name": "etoro_get_instrument_feed",
+      "description": "Get the social feed for an instrument."
+    },
+    {
+      "name": "etoro_get_user_feed",
+      "description": "Get the social feed for a user."
+    },
+    {
+      "name": "etoro_create_post",
+      "description": "Create a new post on the eToro social feed."
+    },
+    {
+      "name": "etoro_create_comment",
+      "description": "Comment on an existing post."
+    }
   ],
   "user_config": {
     "api_key": {
