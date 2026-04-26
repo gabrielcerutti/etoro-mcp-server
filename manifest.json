@@ -5,7 +5,7 @@
   "display_name": "eToro",
   "version": "1.1.1",
   "description": "Connect Claude to your eToro account for portfolio analysis, market research, and trading.",
-  "long_description": "Wraps the eToro public API and exposes 35 tools for AI assistants — built primarily for **investment research and portfolio analysis**. Assess open positions and unrealized P&L, research instruments and themes, vet popular investors for copy-trading, and backtest DCA strategies against historical OHLCV data. Trading is fully supported (market and limit orders, partial close), but use care: **letting an AI agent place real-money orders is genuinely risky.** Always start in `demo` mode and require explicit confirmation before any `real` order.",
+  "long_description": "Investment research and portfolio analysis on your eToro account: assess positions, research instruments, vet popular investors, backtest strategies. Trading is supported, but use `demo` mode first — AI-driven real-money orders are risky.",
   "icon": "icon.png",
   "license": "MIT",
   "author": {
