@@ -16,6 +16,7 @@ on:
 permissions:
   contents: write
   id-token: write
+  packages: write
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -124,3 +125,10 @@ jobs:
         run: |
           ./mcp-publisher login github-oidc
           ./mcp-publisher publish
+
+      - name: Publish to GitHub Packages
+        run: |
+          npm pkg set name=@gabrielcerutti/etoro-mcp-server
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+          npm publish --registry=https://npm.pkg.github.com --access=public
+          npm pkg set name=etoro-mcp-server
