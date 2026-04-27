@@ -1,7 +1,7 @@
 # eToro MCP Server
 
 <div align="center">
-  <img src="icon.png" alt="eToro MCP" width="100" />
+  <img src="https://raw.githubusercontent.com/gabrielcerutti/etoro-mcp-server/main/icon.png" alt="eToro MCP" width="100" />
 
   Connect any MCP-compatible AI assistant (Claude, Cursor, and others) to your eToro account for portfolio analysis, market research, and trading.
 
@@ -45,7 +45,7 @@ The assistant calls `etoro_get_portfolio` to pull your open positions, then `eto
 > | Financials | 8% | SAP |
 > | Other | 7% | LDO + others |
 >
-> <img src="readme-assets/portfolio-allocation.png" width="480" alt="Portfolio sector allocation" />
+> <img src="https://raw.githubusercontent.com/gabrielcerutti/etoro-mcp-server/main/readme-assets/portfolio-allocation.png" width="480" alt="Portfolio sector allocation" />
 >
 > **Trouble spot:** Your tech sleeve is 38% of invested capital and concentrated in 5 mega-caps. A single sector drawdown hits hard — consider whether the ETF overlap (QQQ, SOXX) is intentional diversification or accidental doubling-down.
 
@@ -75,7 +75,7 @@ Search is keyword-based — `etoro_search_instruments` finds instruments by tick
 > | Apr 12 | $184.15 | $201.69 | $183.98 | $201.64 |
 > | Apr 19 | $199.02 | $210.92 | $197.23 | $208.26 |
 >
-> <img src="readme-assets/nvda-candles.png" width="560" alt="NVDA weekly candlestick chart" />
+> <img src="https://raw.githubusercontent.com/gabrielcerutti/etoro-mcp-server/main/readme-assets/nvda-candles.png" width="560" alt="NVDA weekly candlestick chart" />
 >
 > NVDA rallied +27% off the March low ($162.95 → $208.26), with each weekly candle printing a higher low. Momentum is strong but the move is getting extended.
 
@@ -107,7 +107,7 @@ Vet popular investors using real public data. The assistant calls `etoro_get_use
 > | 2018 | −10.9% | | 2025 | +37.7% |
 > | 2019 | +45.1% | | | |
 >
-> <img src="readme-assets/jeppe-performance.png" width="600" alt="jeppekirkbonde yearly performance" />
+> <img src="https://raw.githubusercontent.com/gabrielcerutti/etoro-mcp-server/main/readme-assets/jeppe-performance.png" width="600" alt="jeppekirkbonde yearly performance" />
 >
 > **Average annual return:** +30.7% across 13 full years. Three down years (2014, 2018, 2022) with a max drawdown of −19.2% in the 2022 tech selloff.
 >
