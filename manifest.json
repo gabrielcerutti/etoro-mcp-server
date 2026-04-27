@@ -3,7 +3,7 @@
   "manifest_version": "0.3",
   "name": "etoro",
   "display_name": "eToro",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "Connect Claude to your eToro account for portfolio analysis, market research, and trading.",
   "long_description": "Investment research and portfolio analysis on your eToro account: assess positions, research instruments, vet popular investors, backtest strategies. Trading is supported, but use `demo` mode first — AI-driven real-money orders are risky.",
   "icon": "icon.png",
