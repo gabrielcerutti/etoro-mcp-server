@@ -126,9 +126,17 @@ jobs:
           ./mcp-publisher login github-oidc
           ./mcp-publisher publish
 
+      - name: Set up Node.js for GitHub Packages
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@gabrielcerutti"
+
       - name: Publish to GitHub Packages
         run: |
           npm pkg set name=@gabrielcerutti/etoro-mcp-server
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
-          npm publish --registry=https://npm.pkg.github.com --access=public
+          npm publish --access=public
           npm pkg set name=etoro-mcp-server
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -24,3 +24,9 @@ icon.png
 *.mcpb
 *.dxt
 *.plugin
+
+# Local / CI workspace artifacts
+.mcp.json
+server.json
+mcp-publisher
+mcp-publisher.exe
