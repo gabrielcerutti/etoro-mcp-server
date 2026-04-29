@@ -6,6 +6,7 @@
   Connect any MCP-compatible AI assistant (Claude, Cursor, and others) to your eToro account for portfolio analysis, market research, and trading.
 
   [![CI](https://img.shields.io/github/actions/workflow/status/gabrielcerutti/etoro-mcp-server/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/gabrielcerutti/etoro-mcp-server/actions/workflows/ci.yml)
+  [![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/gabrielcerutti/etoro-mcp-server)
   [![Node.js](https://img.shields.io/badge/node-%3E%3D24-brightgreen?style=flat-square)](https://nodejs.org)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=flat-square)](https://www.typescriptlang.org)
   [![MCP SDK](https://img.shields.io/badge/MCP%20SDK-1.26%2B-purple?style=flat-square)](https://modelcontextprotocol.io)
@@ -479,6 +480,8 @@ This project is an **unofficial**, community-built integration. It is not affili
 ## Contributing
 
 Contributions are welcome — bug reports, feature requests, and pull requests.
+
+The [DeepWiki](https://deepwiki.com/gabrielcerutti/etoro-mcp-server) page gives an auto-generated overview of the codebase architecture — useful starting point before diving in.
 
 1. Fork the repo and create a branch from `main`
 2. Run `npm install && npm run build` to verify your changes compile
